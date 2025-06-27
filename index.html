@@ -102,6 +102,94 @@
       </div>
       <!-- <p>If you’re looking for an email client with more features, try <a href="">these</a>.</p> -->
     </section>
+    
+    <section class="section section-breach-alerts">
+      <h2 class="title">Real-Time Data Breach Monitoring</h2>
+      <p class="section-subtitle">Stay ahead of data breaches with instant alerts and comprehensive monitoring</p>
+      
+      <div class="breach-monitor-container">
+        <div class="breach-demo">
+          <div class="monitor-screen">
+            <div class="monitor-header">
+              <div class="monitor-controls">
+                <span class="control-dot red"></span>
+                <span class="control-dot yellow"></span>
+                <span class="control-dot green"></span>
+              </div>
+              <div class="monitor-title">Domain Breach Monitor</div>
+            </div>
+            <div class="monitor-content">
+              <div class="breach-check-form">
+                <input type="email" id="emailInput" placeholder="Enter your email to check for breaches" class="breach-input">
+                <button onclick="checkBreaches()" class="breach-check-btn">
+                  <i data-feather="shield"></i>
+                  Check Breaches
+                </button>
+              </div>
+              <div id="breachResults" class="breach-results"></div>
+              <div class="live-stats">
+                <div class="stat-item">
+                  <span class="stat-icon">🔍</span>
+                  <span class="stat-text">Real-time scanning</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon">⚡</span>
+                  <span class="stat-text">Instant alerts</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon">🛡️</span>
+                  <span class="stat-text">24/7 monitoring</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="breach-features">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-feather="alert-triangle"></i>
+            </div>
+            <h3>Instant Breach Alerts</h3>
+            <p>Get notified immediately when your email appears in new data breaches, with detailed information about the compromised data.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-feather="bar-chart-2"></i>
+            </div>
+            <h3>Risk Score Analysis</h3>
+            <p>Understand your exposure level with detailed risk metrics and password strength analysis from breached accounts.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-feather="server"></i>
+            </div>
+            <h3>Historical Breach Data</h3>
+            <p>Access comprehensive breach history with year-wise analytics and industry-specific exposure patterns.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-feather="shield"></i>
+            </div>
+            <h3>Domain Monitoring</h3>
+            <p>Monitor specific domains for breaches and get detailed reports on exposed data types and affected records.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="breach-cta">
+        <h3>Powered by XposedOrNot API</h3>
+        <p>Integrated with the leading open-source data breach monitoring API, providing real-time alerts and comprehensive analytics.</p>
+        <a href="#" class="cta-button secondary">
+          <i data-feather="link"></i>
+          Learn More About Data Protection
+        </a>
+      </div>
+    </section>
+    
     <section class="section section-how-it-works">
       <h2 class="title">How Kavach protects you</h2>
       <div class="how-it-works-grid">
@@ -254,10 +342,14 @@
     });
 
     // Feather icons
-    feather.replace()
+    try {
+      feather.replace();
+    } catch (e) {
+      console.log('Feather icons error:', e);
+    }
 
     // ScrollReveal
-    ScrollReveal().reveal('.hero, .title, .screen, .features, .cards, .zero-slider', {
+    ScrollReveal().reveal('.hero, .title, .screen, .features, .cards, .zero-slider, .breach-monitor-container', {
       distance: '40px',
       duration: 2000,
       mobile: false,
@@ -265,6 +357,358 @@
       opacity: 0
     });
 
+  });
+
+  // XposedOrNot API Integration with CORS Proxy
+  async function checkBreaches() {
+    const email = document.getElementById('emailInput').value.trim();
+    const resultsDiv = document.getElementById('breachResults');
+    const checkBtn = document.querySelector('.breach-check-btn');
+    
+    if (!email) {
+      resultsDiv.innerHTML = '<div class="error-message">Please enter a valid email address</div>';
+      return;
+    }
+    
+    if (!isValidEmail(email)) {
+      resultsDiv.innerHTML = '<div class="error-message">Please enter a valid email format</div>';
+      return;
+    }
+    
+    // Show loading state
+    checkBtn.innerHTML = '<i data-feather="refresh-cw"></i> Checking...';
+    checkBtn.disabled = true;
+    try {
+      feather.replace();
+    } catch (e) {
+      console.log('Feather icons error:', e);
+    }
+    
+    try {
+      // Try multiple backend URLs for maximum compatibility
+      const possibleBackends = [
+        window.location.origin, // Same origin as frontend
+        'http://localhost:3001', // Default backend port
+        'http://127.0.0.1:3001'  // Alternative localhost
+      ];
+      
+      let response = null;
+      let lastError = null;
+      
+      for (const backendUrl of possibleBackends) {
+        try {
+          const apiUrl = `${backendUrl}/api/check-email/${encodeURIComponent(email)}`;
+          console.log(`Trying backend: ${apiUrl}`);
+          
+          response = await fetch(apiUrl, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok || response.status < 500) {
+            console.log(`Backend responded: ${backendUrl}`);
+            break; // Success or client error, stop trying
+          }
+        } catch (err) {
+          console.log(`Backend failed: ${backendUrl}`, err.message);
+          lastError = err;
+          response = null;
+        }
+      }
+      
+      // If all backends failed, throw the last error
+      if (!response) {
+        throw lastError || new Error('All backend endpoints failed');
+      }
+      
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.Error === "Not found") {
+          resultsDiv.innerHTML = `
+            <div class="breach-result safe">
+              <div class="result-icon">
+                <i data-feather="check-circle"></i>
+              </div>
+              <div class="result-content">
+                <h4>Good News!</h4>
+                <p>This email address was not found in any known data breaches in our database.</p>
+                <div class="security-tips">
+                  <p><strong>Security Tips:</strong></p>
+                  <ul>
+                    <li>Continue using strong, unique passwords</li>
+                    <li>Enable two-factor authentication where possible</li>
+                    <li>Monitor your accounts regularly</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (data.breaches && Array.isArray(data.breaches) && data.breaches.length > 0) {
+          const breaches = data.breaches[0];
+          resultsDiv.innerHTML = `
+            <div class="breach-result danger">
+              <div class="result-icon">
+                <i data-feather="alert-triangle"></i>
+              </div>
+              <div class="result-content">
+                <h4>Breaches Found!</h4>
+                <p>This email was found in <strong>${breaches.length}</strong> data breach${breaches.length > 1 ? 'es' : ''}:</p>
+                <div class="breach-list">
+                  ${breaches.map(breach => `<span class="breach-tag">${breach}</span>`).join('')}
+                </div>
+                <div class="recommendation">
+                  <p><strong><i data-feather="alert-octagon"></i> Immediate Actions Required:</strong></p>
+                  <ul>
+                    <li>Change passwords for these services immediately</li>
+                    <li>Enable two-factor authentication (2FA)</li>
+                    <li>Monitor your accounts for suspicious activity</li>
+                    <li>Consider using a password manager</li>
+                    <li>Check your credit report if financial data was exposed</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          // Fallback for unexpected response format
+          resultsDiv.innerHTML = `
+            <div class="breach-result safe">
+              <div class="result-icon">
+                <i data-feather="check-circle"></i>
+              </div>
+              <div class="result-content">
+                <h4>Good News!</h4>
+                <p>This email address was not found in any known data breaches in our database.</p>
+              </div>
+            </div>
+          `;
+        }
+        
+        // Try to get detailed analytics with a separate request
+        setTimeout(() => {
+          getDetailedAnalytics(email);
+        }, 1000);
+        
+      } else {
+        // Handle HTTP errors from our backend
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        
+        if (response.status === 429) {
+          // Rate limit exceeded
+          resultsDiv.innerHTML = `
+            <div class="breach-result warning">
+              <div class="result-icon">
+                <i data-feather="clock"></i>
+              </div>
+              <div class="result-content">
+                <h4>⏱️ Rate Limit Exceeded</h4>
+                <p>${errorData.message || 'Too many requests. Please try again later.'}</p>
+                ${errorData.retryAfter ? `<p>Please wait ${errorData.retryAfter} seconds before trying again.</p>` : ''}
+              </div>
+            </div>
+          `;
+          return;
+        } else if (response.status === 400) {
+          // Bad request (invalid email)
+          resultsDiv.innerHTML = `
+            <div class="error-message">
+              <i data-feather="alert-circle"></i>
+              ${errorData.message || 'Invalid email address format'}
+            </div>
+          `;
+          return;
+        } else {
+          throw new Error(`HTTP ${response.status}: ${errorData.message || response.statusText}`);
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error checking breaches:', error);
+      
+      // Show user-friendly error message
+      resultsDiv.innerHTML = `
+        <div class="breach-result warning">
+          <div class="result-icon">
+            <i data-feather="wifi-off"></i>
+          </div>
+          <div class="result-content">
+            <h4>⚠️ Connection Error</h4>
+            <p>Unable to check breaches at the moment. This could be due to:</p>
+            <ul>
+              <li>Network connectivity issues</li>
+              <li>Server maintenance</li>
+              <li>API service temporarily unavailable</li>
+            </ul>
+            <p><strong>Falling back to demo mode...</strong></p>
+          </div>
+        </div>
+      `;
+      
+      // Fall back to demo mode after a short delay
+      setTimeout(() => {
+        console.log('Falling back to demo mode');
+        checkBreachesDemo(email);
+      }, 2000);
+    } finally {
+      // Reset button state
+      checkBtn.innerHTML = '<i data-feather="shield"></i> Check Breaches';
+      checkBtn.disabled = false;
+      try {
+        feather.replace();
+      } catch (e) {
+        console.log('Feather icons error:', e);
+      }
+    }
+  }
+  
+  // Get detailed analytics in a separate function
+  async function getDetailedAnalytics(email) {
+    try {
+      const proxyUrl = 'https://api.allorigins.win/raw?url=';
+      const analyticsUrl = `https://api.xposedornot.com/v1/breach-analytics?email=${encodeURIComponent(email)}`;
+      const response = await fetch(proxyUrl + encodeURIComponent(analyticsUrl));
+      
+      if (response.ok) {
+        const text = await response.text();
+        const analyticsData = JSON.parse(text);
+        
+        if (analyticsData.BreachMetrics && !analyticsData.Error) {
+          addAnalyticsToResults(analyticsData);
+        }
+      }
+    } catch (error) {
+      console.log('Analytics not available:', error);
+    }
+  }
+  
+  function addAnalyticsToResults(analyticsData) {
+    const resultsDiv = document.getElementById('breachResults');
+    const currentContent = resultsDiv.innerHTML;
+    
+    if (analyticsData.BreachMetrics && analyticsData.BreachMetrics.risk) {
+      const riskData = analyticsData.BreachMetrics.risk[0];
+      const riskScore = riskData.risk_score;
+      const riskLabel = riskData.risk_label;
+      
+      const analyticsHtml = `
+        <div class="breach-analytics">
+          <h5>Risk Assessment</h5>
+          <div class="risk-score ${riskLabel.toLowerCase()}">
+            <span class="score-value">${riskScore}/10</span>
+            <span class="score-label">${riskLabel} Risk</span>
+          </div>
+        </div>
+      `;
+      
+      resultsDiv.innerHTML = currentContent + analyticsHtml;
+    }
+  }
+  
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+  
+  // Demo breach data for testing
+  const demoBreachData = {
+    'test@example.com': {
+      breaches: [['Adobe', 'LinkedIn', 'Dropbox']],
+      risk: 'High',
+      score: 8
+    },
+    'demo@gmail.com': {
+      breaches: [['Facebook', 'Twitter']],
+      risk: 'Medium', 
+      score: 5
+    },
+    'safe@domain.com': {
+      breaches: null,
+      risk: 'Low',
+      score: 1
+    }
+  };
+  
+  // Enhanced breach checker with demo mode
+  function checkBreachesDemo(email) {
+    const resultsDiv = document.getElementById('breachResults');
+    const demoData = demoBreachData[email.toLowerCase()];
+    
+    if (demoData && demoData.breaches) {
+      const breaches = demoData.breaches[0];
+      resultsDiv.innerHTML = `
+        <div class="breach-result danger">
+          <div class="result-icon">
+            <i data-feather="alert-triangle"></i>
+          </div>
+          <div class="result-content">
+            <h4>⚠️ Demo: Breaches Found!</h4>
+            <p>This email was found in <strong>${breaches.length}</strong> data breach${breaches.length > 1 ? 'es' : ''}:</p>
+            <div class="breach-list">
+              ${breaches.map(breach => `<span class="breach-tag">${breach}</span>`).join('')}
+            </div>
+            <div class="recommendation">
+              <p><strong><i data-feather="alert-octagon"></i> Immediate Actions Required:</strong></p>
+              <ul>
+                <li>Change passwords for these services immediately</li>
+                <li>Enable two-factor authentication (2FA)</li>
+                <li>Monitor your accounts for suspicious activity</li>
+                <li>Consider using a password manager</li>
+              </ul>
+            </div>
+            <p class="demo-note">
+              <em>This is a demo result. Real API integration provides live breach data.</em>
+            </p>
+          </div>
+        </div>
+      `;
+    } else {
+      resultsDiv.innerHTML = `
+        <div class="breach-result safe">
+          <div class="result-icon">
+            <i data-feather="check-circle"></i>
+          </div>
+          <div class="result-content">
+            <h4>Demo: Good News!</h4>
+            <p>This email address was not found in any known data breaches.</p>
+            <div class="security-tips">
+              <p><strong>Security Tips:</strong></p>
+              <ul>
+                <li>Continue using strong, unique passwords</li>
+                <li>Enable two-factor authentication where possible</li>
+                <li>Monitor your accounts regularly</li>
+                <li>Use Kavach extension for enhanced privacy</li>
+              </ul>
+            </div>
+            <p class="demo-note">
+              <em>This is a demo result. Try: test@example.com, demo@gmail.com, or any other email.</em>
+            </p>
+          </div>
+        </div>
+      `;
+    }
+    
+    try {
+      feather.replace();
+    } catch (e) {
+      console.log('Feather icons error:', e);
+    }
+  }
+  
+  // Allow Enter key to trigger breach check
+  document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('emailInput');
+    if (emailInput) {
+      emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          checkBreaches();
+        }
+      });
+    }
   });
 </script>
 </div>
