@@ -2490,7 +2490,13 @@ h2,
     font-family: "colfax-light", sans-serif;
     line-height: 1.6;
     font-size: 40px;
-    color: #222
+    color: #222;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0);
 }
 
 h2,
@@ -2724,13 +2730,21 @@ button {
     width: 100%
 }
 
+.hero .title {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
 .hero .button {
     margin-top: 30px
 }
 
 .logo {
-    height: 3000px;
-    width: 3000px;
+    height: auto;
+    width: auto;
     z-index: 2;
     margin-top: 100px;
 }
@@ -2738,7 +2752,7 @@ button {
 .logo img {
     -webkit-transition: all 0.4s ease;
     transition: all 0.4s ease;
-    width: 210px;
+    width: 280px;
     height: auto;
     max-width: none;
 }
@@ -2930,6 +2944,10 @@ button {
 @media (max-width: 900px) {
     .hero {
         padding: 140px 0 60px
+    }
+    
+    .logo img {
+        width: 220px;
     }
 
     .screen-wrapper .screen {
