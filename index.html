@@ -387,7 +387,8 @@
     try {
       // Try multiple backend URLs for maximum compatibility
       const possibleBackends = [
-        window.location.origin, // Same origin as frontend
+        'https://kavach-landing.onrender.com', // Production backend
+        window.location.origin, // Same origin as frontend (for local dev)
         'http://localhost:3001', // Default backend port
         'http://127.0.0.1:3001'  // Alternative localhost
       ];
