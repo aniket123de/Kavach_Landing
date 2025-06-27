@@ -4085,9 +4085,6 @@ html {
 }
 
 /* Enhanced hero section */
-.hero .title {
-    animation: fadeInUp 0.8s ease-out;
-}
 
 .hero .title.shift {
     animation: fadeInUp 0.8s ease-out 0.2s both;
