@@ -1,0 +1,398 @@
+/* Real-Time Data Breach Monitoring Section */
+.section-breach-alerts {
+    background: linear-gradient(135deg, rgba(0, 126, 54, 0.05) 0%, rgba(223, 255, 25, 0.05) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-breach-alerts::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,126,54,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.section-breach-alerts .title {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #007E36 0%, #00a049 50%, #DFFF19 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 8px rgba(0, 126, 54, 0.3);
+}
+
+.section-breach-alerts .section-subtitle {
+    text-align: center;
+    font-family: "colfax-light", sans-serif;
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.breach-monitor-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.breach-demo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.monitor-screen {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(24px);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 0 8px 32px rgba(0, 126, 54, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    width: 100%;
+    max-width: 500px;
+    transition: all 0.4s ease;
+}
+
+.monitor-screen:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15), 0 12px 40px rgba(0, 126, 54, 0.15);
+}
+
+.monitor-header {
+    background: linear-gradient(135deg, #007E36 0%, #00a049 100%);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.monitor-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.control-dot.red { background: #ff5f56; }
+.control-dot.yellow { background: #ffbd2e; }
+.control-dot.green { background: #27ca3f; }
+
+.control-dot:hover {
+    transform: scale(1.2);
+}
+
+.monitor-title {
+    color: white;
+    font-family: "colfax-medium", sans-serif;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.monitor-content {
+    padding: 30px;
+}
+
+.breach-check-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.breach-input {
+    padding: 15px 20px;
+    border: 2px solid rgba(0, 126, 54, 0.2);
+    border-radius: 12px;
+    font-family: "colfax-light", sans-serif;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.breach-input:focus {
+    border-color: #007E36;
+    box-shadow: 0 0 0 3px rgba(0, 126, 54, 0.1);
+    background: white;
+}
+
+.breach-check-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #007E36 0%, #00a049 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: "colfax-medium", sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 126, 54, 0.3);
+}
+
+.breach-check-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 126, 54, 0.4);
+}
+
+.breach-check-btn:active {
+    transform: translateY(0);
+}
+
+.breach-check-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.breach-results {
+    min-height: 100px;
+    margin-bottom: 25px;
+}
+
+.live-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    background: rgba(0, 126, 54, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 126, 54, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(0, 126, 54, 0.1);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.stat-text {
+    font-family: "colfax-light", sans-serif;
+    font-size: 14px;
+    color: #007E36;
+    font-weight: 500;
+}
+
+.breach-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(24px);
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #007E36 0%, #DFFF19 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #007E36 0%, #00a049 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.feature-icon i {
+    color: white;
+    width: 28px;
+    height: 28px;
+}
+
+.feature-card h3 {
+    font-family: "colfax-bold", sans-serif;
+    font-size: 20px;
+    color: #007E36;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.feature-card p {
+    font-family: "colfax-light", sans-serif;
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.breach-cta {
+    text-align: center;
+    margin-top: 60px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(24px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+.breach-cta h3 {
+    font-family: "colfax-bold", sans-serif;
+    font-size: 24px;
+    color: #007E36;
+    margin-bottom: 15px;
+}
+
+.breach-cta p {
+    font-family: "colfax-light", sans-serif;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-button.secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #DFFF19 0%, #c4e617 100%);
+    color: #007E36;
+    text-decoration: none;
+    border-radius: 100px;
+    font-family: "colfax-medium", sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(223, 255, 25, 0.3);
+}
+
+.cta-button.secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(223, 255, 25, 0.4);
+    color: #007E36;
+}
+
+.cta-button.secondary i {
+    width: 18px;
+    height: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .breach-monitor-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 20px;
+    }
+    
+    .breach-features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .live-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .monitor-content {
+        padding: 20px;
+    }
+    
+    .breach-cta {
+        margin-top: 40px;
+        padding: 30px 20px;
+    }
+    
+    .section-breach-alerts .section-subtitle {
+        font-size: 16px;
+        margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .breach-monitor-container {
+        padding: 0 15px;
+    }
+    
+    .monitor-content {
+        padding: 15px;
+    }
+    
+    .feature-card {
+        padding: 20px;
+    }
+    
+    .breach-cta {
+        padding: 25px 15px;
+    }
+    
+    .breach-cta h3 {
+        font-size: 20px;
+    }
+    
+    .breach-cta p {
+        font-size: 14px;
+    }
+} 
