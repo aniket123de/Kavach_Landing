@@ -3410,7 +3410,7 @@ form .group .border {
     top: -2px;
     left: 0.625rem;
     position: absolute;
-    background: #e8e8e8;
+    background: #ffffff;
     transition: width 0.5s ease-out, left 0.3s ease-out;
    }
    
