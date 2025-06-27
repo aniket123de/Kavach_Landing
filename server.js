@@ -347,6 +347,7 @@ app.listen(PORT, () => {
 ║  API Base: http://localhost:${PORT}/api                          ║
 ╚══════════════════════════════════════════════════════════════╝
   `);
+  console.log(`Server running on port ${PORT}`);
 });
 
 // Graceful shutdown
