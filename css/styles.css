@@ -2747,6 +2747,7 @@ button {
     width: auto;
     z-index: 2;
     margin-top: 100px;
+    padding-top: 50px;
 }
 
 .logo img {
