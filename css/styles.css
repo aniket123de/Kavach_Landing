@@ -2766,19 +2766,19 @@ button {
 
 .screen-wrapper {
     max-width: 1800px;
- 
     position: relative;
     overflow: hidden;
     z-index: 2;
     padding: 50px;
     width: 100%;
-    margin: 20px;
+    margin: 20px auto;
 }
 
 .screen-wrapper .screen {
     margin: 10px;
     width: 1200px;
-    height: 640px;
+    max-width: 100%;
+    height: auto;
 }
 
 .title {
@@ -2951,11 +2951,16 @@ button {
         width: 220px;
     }
 
+    .screen-wrapper {
+        padding: 20px;
+        margin: 10px auto;
+    }
+    
     .screen-wrapper .screen {
         margin: 0 auto -40px;
-        max-width: none;
         width: 100%;
-        max-width: 600px;
+        max-width: 700px;
+        height: auto;
     }
 
     .section {
@@ -3711,6 +3716,18 @@ form .group .border {
 }
 
 @media (max-width: 768px) {
+    .screen-wrapper {
+        padding: 15px;
+        margin: 10px auto;
+    }
+    
+    .screen-wrapper .screen {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto -30px;
+    }
+    
     .footer {
         margin-top: 50px;
     }
@@ -3774,6 +3791,18 @@ form .group .border {
 }
 
 @media (max-width: 480px) {
+    .screen-wrapper {
+        padding: 10px;
+        margin: 5px auto;
+    }
+    
+    .screen-wrapper .screen {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto -20px;
+    }
+    
     .footer {
         margin-top: 40px;
     }
@@ -3861,6 +3890,18 @@ form .group .border {
 }
 
 @media (max-width: 360px) {
+    .screen-wrapper {
+        padding: 5px;
+        margin: 5px auto;
+    }
+    
+    .screen-wrapper .screen {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto -15px;
+    }
+    
     .footer-content {
         padding: 0 12px;
     }
@@ -4011,6 +4052,68 @@ a:hover {
 .features .dos .feature:hover {
     border-left-color: #007E36;
     transform: translateX(2px);
+}
+
+/* System Architecture Title */
+.system-architecture-title {
+    letter-spacing: -1px;
+    font-weight: normal;
+    font-family: "colfax-light", sans-serif;
+    line-height: 1.6;
+    font-size: 36px;
+    color: #222;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0);
+    text-align: center;
+    margin-bottom: 20px;
+    padding-top: 40px;
+    position: relative;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+}
+
+/* Kavach Logo Section */
+.kavach-logo-section {
+    text-align: center;
+    padding: 40px 0 20px 0;
+    position: relative;
+}
+
+.kavach-main-logo {
+    max-width: 1200px;
+    height: auto;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.1));
+    opacity: 0.9;
+}
+
+.kavach-main-logo:hover {
+    transform: scale(1.05) rotate(2deg);
+    filter: drop-shadow(0 12px 35px rgba(0, 0, 0, 0.15));
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .system-architecture-title {
+        font-size: 30px;
+        margin-bottom: 15px;
+        padding-top: 30px;
+        width: 100%;
+    }
+    
+    .kavach-main-logo {
+        max-width: 150px;
+    }
+    
+    .kavach-logo-section {
+        padding: 30px 0 15px 0;
+    }
 }
 
 /* How It Works Section */
